@@ -23,7 +23,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Courses.txt">
+    <Text Include="Courses.csv">
       <Filter>Source Files</Filter>
     </Text>
   </ItemGroup>

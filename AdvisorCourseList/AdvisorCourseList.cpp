@@ -32,7 +32,11 @@ public:
     */
     void createTables() {
         char* errMsg = 0;
-        const char* sql = "CREATE TABLE IF NOT EXISTS courses (id INTEGER PRIMARY KEY, name TEXT);";
+        const char* sql = 
+            "CREATE TABLE IF NOT EXISTS courses ("
+            "courseNumber TEXT PRIMARY KEY, "
+            "courseTitle TEXT, "
+            "prerequisite TEXT);";
 
         int rc = sqlite3_exec(db, sql, nullptr, nullptr, &errMsg);
         if (rc != SQLITE_OK) {
@@ -90,7 +94,7 @@ public:
         // Prepare SQL statement
         int rc = sqlite3_prepare_v2(db, sql, -1, &stmt, 0);
         if (rc != SQLITE_OK) {
-            cerr << "Prepared Statement failed" << sqlite3_errmsg(db) << endl;
+            cerr << "Prepared Statement failed " << sqlite3_errmsg(db) << endl;
             return;
         }
 
@@ -131,7 +135,7 @@ public:
         // Prepare SQL statement
         int prep_rc = sqlite3_prepare_v2(db, sql, -1, &stmt, 0);
         if (prep_rc != SQLITE_OK) {
-            cerr << "Prepared Statement failed" << sqlite3_errmsg(db) << endl;
+            cerr << "Prepared Statement failed " << sqlite3_errmsg(db) << endl;
             return;
         }
 
@@ -172,13 +176,13 @@ public:
         // Prepare SQL Statement
         int prep_rc = sqlite3_prepare_v2(db, sql, -1, &stmt, 0);
         if (prep_rc != SQLITE_OK) {
-            cerr << "Prepared Statement failed" << sqlite3_errmsg(db) << endl;
+            cerr << "Prepared Statement failed " << sqlite3_errmsg(db) << endl;
             return;
         }
 
         //Loop to step through each row
-        int step_rc = sqlite3_step(stmt);
-        while (step_rc == SQLITE_ROW) {
+        int step_rc;
+        while ((step_rc = sqlite3_step(stmt)) == SQLITE_ROW) {
 
             // Obtain course data through column indicies
             const char* courseNumber = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
